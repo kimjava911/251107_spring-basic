@@ -1,7 +1,9 @@
 package kr.java;
 
+import kr.java.biz.BizService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 public class Application {
@@ -15,14 +17,19 @@ public class Application {
         try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class)) {
             // 알아서 Config를 읽어서 bean 생성 -> '등록'
             // 등록된 Bean -> Context (container)
+            System.out.println("[실제 로직]");
             MessageService service = ctx.getBean(MessageService.class); // 특정 클래스로 등록된 객체를 '꺼내서' 쓴다
             // 생성 및 생성 관련해서 필요한 매개변수(인자)를 알아서 다 스프링 컨테이너가 관리
+            BizService service2 = ctx.getBean(BizService.class);
+            service2.biz();
             service.show();
         }
     }
 }
 
 @Configuration
+//@ComponentScan(basePackages = "kr.java")
+@ComponentScan(basePackages = "kr.java.biz")
 class AppConfig { // Spring <- 농부. 콩 심는 농부
     // Bean.
     @Bean
