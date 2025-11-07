@@ -1,6 +1,8 @@
 package kr.java;
 
 import kr.java.biz.BizService;
+import kr.java.scope.ProtypeBean;
+import kr.java.scope.SingletonBean;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,13 +25,22 @@ public class Application {
             BizService service2 = ctx.getBean(BizService.class);
             service2.biz();
             service.show();
+            System.out.println("[Scope]");
+            SingletonBean singletonBean1 = ctx.getBean(SingletonBean.class);
+            ProtypeBean protypeBean1 = ctx.getBean(ProtypeBean.class);
+            System.out.println(System.identityHashCode(singletonBean1));
+            System.out.println(System.identityHashCode(protypeBean1));
+            SingletonBean singletonBean2 = ctx.getBean(SingletonBean.class);
+            ProtypeBean protypeBean2 = ctx.getBean(ProtypeBean.class); // Protype은 각각 생성자가 호출
+            System.out.println(System.identityHashCode(singletonBean2)); // 주소값도 Singleton은 같고
+            System.out.println(System.identityHashCode(protypeBean2)); // Prototype은 다름
         }
     }
 }
 
 @Configuration
 //@ComponentScan(basePackages = "kr.java")
-@ComponentScan(basePackages = "kr.java.biz")
+@ComponentScan(basePackages = {"kr.java.biz", "kr.java.scope"})
 class AppConfig { // Spring <- 농부. 콩 심는 농부
     // Bean.
     @Bean
